@@ -67,3 +67,9 @@ cp -r /etc/letsencrypt/live/$domain_name conf/ssl
 ```bash
 docker-compose up -d
 ```
+
+```
+https://admin.example.com/admin/box/
+https://admin.example.com/webmail/
+https://admin.example.com/admin/api/doc
+```
