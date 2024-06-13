@@ -1,6 +1,37 @@
 version: "3"
 services:
-  sample:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.test
+  poste:
+    image: analogic/poste.io
+    container_name: poste
+    hostname: poste
+    environment:
+      - TZ=Asia/Shanghai
+      - DISABLE_CLAMAV=TRUE
+      - DISABLE_RSPAMD=TRUE
+      - VIRTUAL_HOST=mail.${DOMAIN_NAME}
+      - HTTPS=OFF
+      - HTTP_PORT=10080
+      #- HTTPS_PORT=10433
+    ports:
+      - "10080:10080"
+      #- "10433:10433"
+      - "25:25"
+      - "110:110"
+      - "143:143"
+      - "993:993"
+      - "995:995"
+    volumes:
+      - ./data/poste:/data
+      - ./conf/ssl:/etc/letsencrypt/live
+    restart: always
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./conf/nginx:/etc/nginx/conf.d
+      - ./conf/ssl:/etc/letsencrypt/live
+    restart: always

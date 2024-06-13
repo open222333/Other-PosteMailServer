@@ -1,0 +1,3 @@
+*.conf
+!admin.example.com.conf
+!mail.example.com.conf
