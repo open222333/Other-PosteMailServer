@@ -32,18 +32,6 @@ ufw allow 465
 DNS 指向
 
 ```
-$ORIGIN example.com
-@     IN  A      10.11.12.13
-mail  IN  A      10.11.12.13
-
-; mail server for example.com
-@     IN  MX  10 mail.example.com.
-
-; Add SPF record
-@     IN  TXT    "v=spf1 mx -all"
-```
-
-```
 ;; A Records
 admin.example.com.	1	IN	A	xxx.xxx.xxx.xxx
 mail.example.com.	1	IN	A	xxx.xxx.xxx.xxx
