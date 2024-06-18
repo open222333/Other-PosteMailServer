@@ -41,8 +41,35 @@ example.com.	1	IN	MX	10 mail.example.com.
 mail.example.com.	1	IN	MX	10 mail.example.com.
 ```
 
+證書從其他主機傳遞
+
 ```bash
-domain_name="yourdomain.com"
+domain_name="yourdomain"
+cp .env.sample .env
+cp conf/admin.example.com.conf conf/nginx/admin.$domain_name.conf
+cp conf/mail.example.com.conf conf/nginx/mail.$domain_name.conf
+sed -i "s/example.com/$domain_name/g" .env
+sed -i "s/example.com/$domain_name/g" conf/nginx/admin.$domain_name.conf
+sed -i "s/example.com/$domain_name/g" conf/nginx/mail.$domain_name.conf
+mkdir -p /etc/letsencrypt/live
+```
+
+```bash
+domain_name="yourdomain"
+ssl_hostname="ssl_hostname"
+target_hostname="target_hostname"
+scp -r $ssl_hostname:/etc/letsencrypt/live/$domain_name .
+scp -r ./$domain_name $target_hostname:/etc/letsencrypt/live
+```
+
+```bash
+cp -r /etc/letsencrypt/live/$domain_name conf/ssl
+```
+
+證書在本機的指令
+
+```bash
+domain_name="yourdomain"
 cp .env.sample .env
 cp conf/admin.example.com.conf conf/nginx/admin.$domain_name.conf
 cp conf/mail.example.com.conf conf/nginx/mail.$domain_name.conf
