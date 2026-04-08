@@ -1,0 +1,13 @@
+# Haraka IP whitelist (connect.rdns_access plugin)
+# 每行一個 IP 或 CIDR，# 開頭為註解
+# 白名單內的 IP 不受 rdns 檢查限制
+
+# Docker 預設網段
+172.17.0.0/16
+
+# Docker Compose 自訂網段（視實際情況調整）
+172.18.0.0/16
+# 10.0.0.0/8
+
+# 信任的外部 IP（視需求加入）
+# xxx.xxx.xxx.xxx

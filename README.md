@@ -8,27 +8,36 @@ Poste.io 郵件伺服器 + Nginx 反向代理 Docker 環境
 
 ## 目錄
 
-- [專案說明](#專案說明)
-- [架構概覽](#架構概覽)
-- [連接埠說明](#連接埠說明)
-- [各模式說明](#各模式說明)
-  - [模式一：SSL 證書從其他主機取得](#模式一ssl-證書從其他主機取得)
-  - [模式二：SSL 證書在本機](#模式二ssl-證書在本機)
-- [執行流程](#執行流程)
-  - [模式一流程](#模式一流程)
-  - [模式二流程](#模式二流程)
-- [使用方法](#使用方法)
-  - [前置作業](#前置作業)
-  - [模式一：遠端複製 SSL 證書](#模式一遠端複製-ssl-證書)
-  - [模式二：本機 SSL 證書](#模式二本機-ssl-證書)
-  - [啟動服務](#啟動服務)
-  - [管理介面](#管理介面)
-- [設定檔說明](#設定檔說明)
-  - [.env](#env)
-  - [Nginx 設定](#nginx-設定)
-  - [docker-compose.yml](#docker-composeyml)
-- [建議注意事項](#建議注意事項)
-- [參考資料](#參考資料)
+- [Other-PosteMailServer](#other-postemailserver)
+  - [目錄](#目錄)
+  - [專案說明](#專案說明)
+  - [架構概覽](#架構概覽)
+  - [連接埠說明](#連接埠說明)
+  - [各模式說明](#各模式說明)
+    - [模式一：SSL 證書從其他主機取得](#模式一ssl-證書從其他主機取得)
+    - [模式二：SSL 證書在本機](#模式二ssl-證書在本機)
+  - [執行流程](#執行流程)
+    - [模式一流程](#模式一流程)
+    - [模式二流程](#模式二流程)
+  - [使用方法](#使用方法)
+    - [前置作業](#前置作業)
+    - [模式一：遠端複製 SSL 證書](#模式一遠端複製-ssl-證書)
+    - [模式二：本機 SSL 證書](#模式二本機-ssl-證書)
+    - [啟動服務](#啟動服務)
+    - [管理介面](#管理介面)
+  - [設定檔說明](#設定檔說明)
+    - [.env](#env)
+    - [Nginx 設定](#nginx-設定)
+    - [Haraka 白名單](#haraka-白名單)
+    - [docker-compose.yml](#docker-composeyml)
+  - [建議注意事項](#建議注意事項)
+    - [DNS 設定](#dns-設定)
+    - [SSL 證書](#ssl-證書)
+    - [防火牆](#防火牆)
+    - [Poste.io 設定](#posteio-設定)
+    - [Nginx 反向代理](#nginx-反向代理)
+    - [一般建議](#一般建議)
+  - [參考資料](#參考資料)
 
 ---
 
@@ -328,6 +337,28 @@ server {
 ```
 
 `conf/mail.example.com.conf`（Webmail 路由至 `/mail`）：類似上方，`location /mail` 代理至 Poste。
+
+### Haraka 白名單
+
+`conf/poste/haraka/connect.rdns_access.whitelist`：Haraka `connect.rdns_access` plugin 的 IP 白名單，白名單內的 IP 不受 rdns 檢查限制。
+
+```
+# 每行一個 IP 或 CIDR，# 開頭為註解
+
+# Docker 預設網段
+172.17.0.0/16
+
+# Docker Compose 自訂網段（視實際情況調整）
+# 172.18.0.0/16
+```
+
+此檔案已透過 `docker-compose.yml` 掛載至容器內 `/data/haraka/config/connect.rdns_access.whitelist`，修改後**不需重啟容器**，Haraka 會自動重新讀取。
+
+若不確定 Docker 網段，可執行：
+
+```bash
+docker network inspect bridge --format '{{range .IPAM.Config}}{{.Subnet}}{{end}}'
+```
 
 ### docker-compose.yml
 
