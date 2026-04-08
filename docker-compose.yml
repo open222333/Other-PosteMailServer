@@ -1,7 +1,7 @@
 version: "3"
 services:
   poste:
-    image: analogic/poste.io
+    image: analogic/poste.io:2.4.2
     container_name: poste
     hostname: poste
     environment:
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./data/poste:/data
       - ./conf/ssl:/etc/letsencrypt/live
-      - ./conf/poste/haraka/connect.rdns_access.whitelist:/data/haraka/config/connect.rdns_access.whitelist
+      # - ./conf/haraka/connect.rdns_access.whitelist:/data/haraka/config/connect.rdns_access.whitelist
     restart: always
   nginx:
     image: nginx:latest

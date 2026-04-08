@@ -142,7 +142,8 @@ Poste.io (poste container)
         │
         ▼
 7. 開放防火牆連接埠
-   ufw allow 25 587 465
+   # ufw: ufw allow 25,587,465/tcp
+   # firewalld: firewall-cmd --permanent --add-port=25/tcp --add-port=587/tcp --add-port=465/tcp && firewall-cmd --reload
         │
         ▼
 8. 啟動服務
@@ -172,7 +173,8 @@ Poste.io (poste container)
         │
         ▼
 4. 開放防火牆連接埠
-   ufw allow 25 587 465
+   # ufw: ufw allow 25,587,465/tcp
+   # firewalld: firewall-cmd --permanent --add-port=25/tcp --add-port=587/tcp --add-port=465/tcp && firewall-cmd --reload
         │
         ▼
 5. 啟動服務
@@ -208,10 +210,21 @@ mail.example.com.    1   IN   MX  10 mail.example.com.
 
 **防火牆開放：**
 
+ufw：
+
 ```bash
-ufw allow 25
-ufw allow 587
-ufw allow 465
+ufw allow 25/tcp
+ufw allow 587/tcp
+ufw allow 465/tcp
+```
+
+firewalld：
+
+```bash
+firewall-cmd --permanent --add-port=25/tcp
+firewall-cmd --permanent --add-port=587/tcp
+firewall-cmd --permanent --add-port=465/tcp
+firewall-cmd --reload
 ```
 
 ---
@@ -401,7 +414,7 @@ services:
 
 - 埠號 **25（SMTP）必須對外開放**，否則其他郵件伺服器無法將郵件送達
 - 587（Submission）與 465（SMTPS）用於郵件客戶端發信，視需求開放
-- 若主機有雲端防火牆（如 AWS Security Group、GCP Firewall），除 `ufw` 外也需在雲端控制台開放對應埠號
+- 若主機有雲端防火牆（如 AWS Security Group、GCP Firewall），除 `ufw` / `firewalld` 外也需在雲端控制台開放對應埠號
 
 ### Poste.io 設定
 
